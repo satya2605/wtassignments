@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% if object %}Update{% else %}New{% endif %} Registration | Tutorial 6</title>
+    <style>
+        body { font-family: sans-serif; background: #f0f2f5; display: flex; justify-content: center; padding-top: 50px; }
+        .form-card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 400px; }
+        input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
+        .errorlist { color: #d63031; font-size: 13px; list-style: none; padding: 0; }
+        button { width: 100%; padding: 12px; background: #6c5ce7; border: none; color: white; border-radius: 6px; cursor: pointer; font-size: 16px; margin-top: 10px; }
+        .back-link { display: block; text-align: center; margin-top: 15px; color: #636e72; text-decoration: none; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <div class="form-card">
+        <h2>{% if object %}Edit{% else %}Register for Event{% endif %}</h2>
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Save Registration</button>
+        </form>
+        <a href="{% url 'event_list' %}" class="back-link">← Back to List</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ job.job_title }} | {{ job.company_name }}</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #fff; padding: 60px 20px; line-height: 1.6; }
+        .wrapper { max-width: 700px; margin: 0 auto; }
+        .back { color: #3498db; text-decoration: none; margin-bottom: 20px; display: block; }
+        h1 { font-size: 2.5rem; margin-bottom: 5px; color: #2c3e50; }
+        .company-header { font-size: 1.2rem; color: #7f8c8d; border-bottom: 1px solid #eee; padding-bottom: 20px; margin-bottom: 40px; }
+        .description { font-size: 1.1rem; color: #444; white-space: pre-wrap; }
+        .apply-btn { display: inline-block; background: #2ecc71; color: white; padding: 15px 40px; border-radius: 5px; text-decoration: none; font-weight: bold; margin-top: 40px; }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <a href="{% url 'job_list' %}" class="back">← All Jobs</a>
+        
+        <h1>{{ job.job_title }}</h1>
+        <div class="company-header">
+            <strong>{{ job.company_name }}</strong> • {{ job.location }} • Posted on {{ job.posted_date|date:"M d" }}
+        </div>
+
+        <div class="description">
+            <h3>Job Description</h3>
+            {{ job.description }}
+        </div>
+
+        <a href="#" class="apply-btn">Apply Now</a>
+    </div>
+</body>
+</html>

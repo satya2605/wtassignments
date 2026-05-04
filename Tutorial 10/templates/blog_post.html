@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Real-Time Comments | Tutorial 10</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f8f9fa; padding: 40px; }
+        .blog-container { max-width: 700px; margin: 0 auto; background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        h1 { color: #212529; }
+        .post-content { margin-bottom: 50px; line-height: 1.6; color: #495057; font-size: 1.1rem; }
+        
+        /* Comment Section */
+        .comment-section { border-top: 2px solid #e9ecef; padding-top: 30px; }
+        .comment-item { background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid #007bff; animation: fadeIn 0.5s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .comment-user { font-weight: bold; color: #007bff; }
+        .comment-date { font-size: 0.8rem; color: #6c757d; float: right; }
+        
+        /* Form */
+        .comment-form { margin-top: 40px; background: #fff; padding: 20px; border: 1px solid #dee2e6; border-radius: 8px; }
+        .comment-form input, .comment-form textarea { width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ced4da; border-radius: 4px; box-sizing: border-box; }
+        .btn-submit { background: #007bff; color: white; border: none; padding: 12px 25px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .btn-submit:hover { background: #0056b3; }
+    </style>
+</head>
+<body>
+
+<div class="blog-container">
+    <article class="post-content">
+        <h1>Exploring Real-Time Web with AJAX</h1>
+        <p>AJAX (Asynchronous JavaScript and XML) allows web pages to be updated asynchronously by exchanging data with a web server behind the scenes. This means that it is possible to update parts of a web page, without reloading the whole page.</p>
+        <p>In this tutorial, we will implement a real-time comment system that demonstrates this power.</p>
+    </article>
+
+    <div class="comment-section">
+        <h3>Comments (<span id="comment-count">{{ comments.count }}</span>)</h3>
+        <div id="comment-list">
+            {% for comment in comments %}
+            <div class="comment-item">
+                <span class="comment-date">{{ comment.created_date|date:"F d, Y, h:i A" }}</span>
+                <p class="comment-user">{{ comment.username }}</p>
+                <p>{{ comment.comment_text }}</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="comment-form">
+            <h4>Leave a Comment</h4>
+            <form id="comment-form">
+                {% csrf_token %}
+                <input type="text" id="username" name="username" placeholder="Your Name" required>
+                <textarea id="comment_text" name="comment_text" rows="3" placeholder="Write your comment..." required></textarea>
+                <button type="submit" class="btn-submit">Post Comment</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // AJAX Logic using Fetch API
+    document.getElementById('comment-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+        const commentList = document.getElementById('comment-list');
+        const commentCount = document.getElementById('comment-count');
+
+        fetch("{% url 'post_comment' %}", {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest', // Important for Django view detection
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Create new comment HTML dynamically
+                const newComment = `
+                    <div class="comment-item">
+                        <span class="comment-date">${data.date}</span>
+                        <p class="comment-user">${data.username}</p>
+                        <p>${data.text}</p>
+                    </div>
+                `;
+                
+                // Prepend to the list
+                commentList.insertAdjacentHTML('afterbegin', newComment);
+                
+                // Clear form
+                this.reset();
+                
+                // Update count
+                commentCount.innerText = parseInt(commentCount.innerText) + 1;
+            } else {
+                alert('Error posting comment. Please try again.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Something went wrong.');
+        });
+    });
+</script>
+
+</body>
+</html>

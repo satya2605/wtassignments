@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration Details | Tutorial 6</title>
+    <style>
+        body { font-family: sans-serif; padding: 50px; background: #fdfdfd; }
+        .detail-card { max-width: 500px; margin: 0 auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .label { color: #636e72; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; }
+        .value { font-size: 18px; margin-bottom: 20px; color: #2d3436; }
+        .actions { margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px; display: flex; gap: 15px; }
+        .btn { text-decoration: none; padding: 8px 20px; border-radius: 6px; }
+        .btn-list { background: #dfe6e9; color: #2d3436; }
+        .btn-edit { background: #6c5ce7; color: white; }
+    </style>
+</head>
+<body>
+    <div class="detail-card">
+        <h1>Registration Details</h1>
+        
+        <p class="label">Participant Name</p>
+        <p class="value">{{ registration.participant_name }}</p>
+
+        <p class="label">Event Name</p>
+        <p class="value">{{ registration.event_name }}</p>
+
+        <p class="label">Email Address</p>
+        <p class="value">{{ registration.email }}</p>
+
+        <p class="label">Contact Number</p>
+        <p class="value">{{ registration.contact_number }}</p>
+
+        <p class="label">Registration Date</p>
+        <p class="value">{{ registration.registration_date }}</p>
+
+        <div class="actions">
+            <a href="{% url 'event_list' %}" class="btn btn-list">Back to List</a>
+            <a href="{% url 'event_update' registration.pk %}" class="btn btn-edit">Edit Details</a>
+        </div>
+    </div>
+</body>
+</html>

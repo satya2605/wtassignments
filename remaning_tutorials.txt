@@ -1,0 +1,101 @@
+Tutorial 3: implement the Django application life cycle by handling a complete request–response flow using the MVT architecture.
+Problem Statement: Develop a Django web application named that accepts a user request through a URL, processes it using a view, retrieves data from a model, and displays the output using a template.
+
+Task
+
+Create a Django project and app.
+Define a URL pattern that maps to a view.
+Create a model to store student details (roll no., name, student mobile number, email ID, course, and student address).
+Fetch data from the database using Django ORM.
+Render the fetched data in an HTML template.
+
+===========================================================
+Tutorial 4: End-to-End Django Application with Admin Control              build a complete Django application integrating both user interface and admin backend.
+ 
+
+Problem Description:
+Develop a library management system using Django where book details are managed via the admin panel and displayed on the front end.
+
+Tasks to Perform:
+Create a Django project and app.
+Define a Book model (Book ID, Title, Author, Price).
+Register and customize the model in the admin panel.
+Insert data using the admin interface.
+Display book details on a webpage using templates.
+
+
+===========================================================
+Tutorial 5: Problem Statement : Develop a Django-based Employee Management System that stores employee details in a database, displays them on a webpage, redirects users after successful operations, and sends confirmation emails.
+
+ 
+
+Tasks to Perform:
+Create a Django project and app.
+Create Employee Model (Name, Email, Phone, Department, Salary, Date of Joining).
+Form creation and View functions (Add & Display)
+Template design and Redirect implementation  
+
+Email configuration & sending
+=========================================================
+Tutorial No : 6
+
+Use Django Generic Views and Form Processing for handling event registrations.
+
+Problem statement :
+
+Design and develop a Django-based Event Registration System where users can register for different events. The system should store participant information and allow administrators to manage registrations.
+
+Tasks to Perform:
+Create a Django project and app.
+Create a model EventRegistration(participant_name, email, event_name, registration_date, contact_number )
+Implement Generic Views(List, Create, Update,Delete, Detail View)
+
+Create a ModelForm (Validate email and contact number)
+Create templates for:Event registration form, Event list page, Event details page, Delete confirmation page
+=========================================================================
+
+utorial No 7:Develop a Django-based web application that tracks user activity and preferences using Cookies and Sessions, and improves performance using Django Caching.
+
+Task
+
+1. Implement User Preference using Cookies (select a website theme. And Apply the selected theme when the user revisits the site.)
+
+2.Implement login session tracking.(Also Provide a logout option that destroys the session.)
+
+3. Implement Page Caching(Cache the homepage or dashboard for 60 seconds)
+=========================================================================
+Tutorial 8 :News Blog RSS Feed System using Django
+Problem Statement: Develop a Django-based News Blog Application that publishes articles and provides an RSS feed so users can subscribe and receive the latest updates automatically.
+
+Tasks to Perform:
+Create a Django project and app.
+ Create Blog Model (title, content, author,published date ).
+Create Views for Blog Posts (ListView and DetailView)
+Implement RSS Feed(Display latest 5 posts)
+
+Create Templates(for Display all blog posts and for Display single post)
+=========================================================================
+Tut 9: Job Portal RSS Feed for Latest Job Openings
+Develop a Django-based Job Portal where companies can post job openings and users can subscribe to an RSS feed that provides updates on the latest job postings.
+
+Tasks to Perform:
+Create a Django project and app.
+ Create Blog Model (job_title, Company_name, location, desciption, posted_ date ).
+Create Views for Job Posts (ListView and DetailView)
+Create RSS feed displaying latest job postings.
+
+=================================================================
+Tut No 10 :Real-Time Comment System using  AJAX
+
+Problem Statement
+
+Develop a blog comment system where users can post comments on a blog post and see new comments appear instantly without refreshing the page.
+
+Tasks to Perform:
+1. Create a Django project and app.
+2. Create Comment Model (username, Comment_text, created_date ).
+3. Create Blog Page
+
+Implement AJAX Comment Submission
+Update Comment Section Dynamically
+==============================================================

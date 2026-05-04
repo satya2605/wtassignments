@@ -1,0 +1,44 @@
+/* Custom styling over Bootstrap */
+body {
+    background-color: #f4f6f9;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+.card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+}
+
+.card-header {
+    border-top-left-radius: 8px !important;
+    border-top-right-radius: 8px !important;
+}
+
+#intDisplay {
+    font-family: 'Courier New', Courier, monospace;
+    letter-spacing: 2px;
+    word-wrap: break-word;
+}
+
+/* Customizing scrollbar for entity list so it looks clean */
+.entity-list-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.entity-list-container::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+    border-radius: 4px;
+}
+
+.entity-list-container::-webkit-scrollbar-thumb {
+    background: #c1c1c1; 
+    border-radius: 4px;
+}
+
+.entity-list-container::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8; 
+}

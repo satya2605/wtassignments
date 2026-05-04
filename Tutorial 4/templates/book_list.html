@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Collection | Tutorial 4</title>
+    <style>
+        body { font-family: sans-serif; background: #f0f2f5; padding: 20px; }
+        .card-container { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; }
+        .book-card { 
+            background: white; 
+            padding: 20px; 
+            border-radius: 8px; 
+            width: 250px; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .book-card h3 { color: #1a73e8; margin-top: 0; }
+        .book-id { font-size: 0.8rem; color: #5f6368; }
+        .price { font-weight: bold; color: #d93025; font-size: 1.2rem; }
+    </style>
+</head>
+<body>
+    <h1 style="text-align: center;">Library Management System</h1>
+    <div class="card-container">
+        {% for book in books %}
+        <div class="book-card">
+            <span class="book-id">ID: {{ book.book_id }}</span>
+            <h3>{{ book.title }}</h3>
+            <p><strong>Author:</strong> {{ book.author }}</p>
+            <p class="price">₹{{ book.price }}</p>
+        </div>
+        {% empty %}
+        <p>No books available. Please add some via the <a href="/admin">Admin Panel</a>.</p>
+        {% endfor %}
+    </div>
+</body>
+</html>

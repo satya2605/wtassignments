@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Delete Registration | Tutorial 6</title>
+    <style>
+        body { font-family: sans-serif; padding-top: 100px; background: #fdfdfd; text-align: center; }
+        .delete-box { display: inline-block; background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+        h1 { color: #d63031; }
+        .btn { padding: 12px 30px; border-radius: 6px; border: none; cursor: pointer; font-size: 16px; text-decoration: none; }
+        .btn-cancel { background: #dfe6e9; color: #2d3436; margin-right: 10px; }
+        .btn-delete { background: #d63031; color: white; }
+    </style>
+</head>
+<body>
+    <div class="delete-box">
+        <h1>Delete Registration?</h1>
+        <p>Are you sure you want to delete the registration for <strong>{{ object.participant_name }}</strong>?</p>
+        <br>
+        <form method="POST">
+            {% csrf_token %}
+            <a href="{% url 'event_list' %}" class="btn btn-cancel">Cancel</a>
+            <button type="submit" class="btn btn-delete">Confirm Delete</button>
+        </form>
+    </div>
+</body>
+</html>

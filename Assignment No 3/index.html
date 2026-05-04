@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assignment No 3: JavaScript Arrays</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container mt-5">
+    <div class="text-center mb-5">
+        <h1 class="display-5 fw-bold text-primary">Assignment No 3</h1>
+        <p class="lead text-secondary">JavaScript Arrays: Integer Operations & Named Entities</p>
+    </div>
+
+    <div class="row g-4">
+        <!-- Integer Array Section -->
+        <div class="col-md-6">
+            <div class="card shadow-sm h-100 border-0">
+                <div class="card-header bg-primary text-white text-center py-3">
+                    <h5 class="mb-0">Integer Array Operations</h5>
+                </div>
+                <div class="card-body p-4">
+                    <div class="mb-4">
+                        <label for="intInput" class="form-label fw-semibold">Enter Integers (comma separated):</label>
+                        <div class="input-group">
+                            <input type="text" id="intInput" class="form-control" placeholder="e.g. 5, 2, 9, 1, 7">
+                            <button id="addIntBtn" class="btn btn-primary">Set Array</button>
+                        </div>
+                    </div>
+                    
+                    <div class="p-3 bg-light rounded text-center mb-4 border">
+                        <p class="mb-0 text-muted small text-uppercase fw-bold">Current Array</p>
+                        <span id="intDisplay" class="fs-4 text-dark fw-bold">[]</span>
+                    </div>
+
+                    <div class="d-flex gap-2 mb-4">
+                        <button id="sortAscBtn" class="btn btn-outline-primary flex-fill fw-semibold">Sort Ascending</button>
+                        <button id="sortDescBtn" class="btn btn-outline-primary flex-fill fw-semibold">Sort Descending</button>
+                    </div>
+
+                    <hr class="text-muted mb-4">
+
+                    <div class="mb-3">
+                        <label for="searchInt" class="form-label fw-semibold">Search Integer:</label>
+                        <div class="input-group">
+                            <input type="number" id="searchInt" class="form-control" placeholder="Enter number to find">
+                            <button id="searchIntBtn" class="btn btn-info text-white fw-bold">Search</button>
+                        </div>
+                    </div>
+                    <div id="intSearchResult" class="mt-3 text-center fs-5"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Named Entities Section -->
+        <div class="col-md-6">
+            <div class="card shadow-sm h-100 border-0">
+                <div class="card-header bg-success text-white text-center py-3">
+                    <h5 class="mb-0">Named Entities Operations</h5>
+                </div>
+                <div class="card-body p-4">
+                    <div class="mb-4">
+                        <label for="entityInput" class="form-label fw-semibold">Add a Named Entity (e.g., Person, City):</label>
+                        <div class="input-group">
+                            <input type="text" id="entityInput" class="form-control" placeholder="Enter entity name">
+                            <button id="addEntityBtn" class="btn btn-success">Add Entity</button>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3 d-flex justify-content-between align-items-center">
+                        <span class="fw-semibold text-muted text-uppercase small">Entities List</span>
+                        <button id="sortEntityBtn" class="btn btn-sm btn-outline-success fw-semibold">Sort A-Z</button>
+                    </div>
+                    
+                    <div class="entity-list-container border rounded mb-4 bg-light p-2" style="min-height: 120px; max-height: 200px; overflow-y: auto;">
+                        <ul id="entityList" class="list-group list-group-flush">
+                            <!-- Entities will appear here -->
+                        </ul>
+                    </div>
+
+                    <hr class="text-muted mb-4">
+
+                    <div class="mb-3">
+                        <label for="searchEntity" class="form-label fw-semibold">Search Entity:</label>
+                        <div class="input-group">
+                            <input type="text" id="searchEntity" class="form-control" placeholder="Enter name to find">
+                            <button id="searchEntityBtn" class="btn btn-info text-white fw-bold px-4">Search</button>
+                        </div>
+                    </div>
+                    <div id="entitySearchResult" class="mt-3 text-center fs-5"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- jQuery (Required for the assignment) -->
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<!-- Bootstrap JS Bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Custom Script -->
+<script src="script.js"></script>
+</body>
+</html>

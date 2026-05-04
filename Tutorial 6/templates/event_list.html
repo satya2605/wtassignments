@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Event Registrations | Tutorial 6</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; background: #fdfdfd; }
+        .container { max-width: 900px; margin: 0 auto; }
+        .header { display: flex; justify-content: space-between; align-items: center; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; }
+        th { background: #6c5ce7; color: white; }
+        .btn { padding: 8px 16px; border-radius: 4px; text-decoration: none; font-size: 14px; }
+        .btn-add { background: #00b894; color: white; }
+        .btn-view { color: #0984e3; }
+        .btn-edit { color: #fdcb6e; }
+        .btn-delete { color: #d63031; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Event Registrations</h1>
+            <a href="{% url 'event_create' %}" class="btn btn-add">+ Register Participant</a>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Participant</th>
+                    <th>Event</th>
+                    <th>Contact</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for reg in registrations %}
+                <tr>
+                    <td>{{ reg.participant_name }}</td>
+                    <td>{{ reg.event_name }}</td>
+                    <td>{{ reg.contact_number }}</td>
+                    <td>
+                        <a href="{% url 'event_detail' reg.pk %}" class="btn-view">View</a> |
+                        <a href="{% url 'event_update' reg.pk %}" class="btn-edit">Edit</a> |
+                        <a href="{% url 'event_delete' reg.pk %}" class="btn-delete">Delete</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="4" style="text-align: center;">No registrations yet.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

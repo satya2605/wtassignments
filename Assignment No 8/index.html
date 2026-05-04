@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academic Feedback Portal v2 | React Dynamic System</title>
+    
+    <!-- React and Babel CDNs -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Fonts and Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-light: #818cf8;
+            --accent: #c084fc;
+            --bg-dark: #0f172a;
+            --card-glass: rgba(255, 255, 255, 0.03);
+            --border-glass: rgba(255, 255, 255, 0.08);
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+            --success: #10b981;
+            --error: #f43f5e;
+            --nav-bg: rgba(15, 23, 42, 0.85);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: radial-gradient(circle at 0% 0%, #1e1b4b 0%, #0f172a 50%, #1e1b4b 100%);
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Ambient Orbs */
+        .orb {
+            position: fixed;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: -1;
+            opacity: 0.15;
+            pointer-events: none;
+        }
+
+        .orb-1 { top: -10%; left: -10%; background: var(--primary); }
+        .orb-2 { bottom: -10%; right: -10%; background: var(--accent); }
+
+        /* Typography */
+        h1, h2, h3 { font-family: 'Outfit', sans-serif; }
+
+        /* Glass HUD Components */
+        .glass-panel {
+            background: var(--card-glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border-glass);
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Modern Navigation */
+        nav {
+            background: var(--nav-bg);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border-glass);
+            padding: 0 2rem;
+            height: 70px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-brand {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            cursor: pointer;
+            background: linear-gradient(to right, #818cf8, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-item {
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-dim);
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            color: var(--text-main);
+        }
+
+        .nav-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: -24px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 3px 3px 0 0;
+            box-shadow: 0 -2px 10px var(--primary);
+        }
+
+        /* Page Layout */
+        .page-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem;
+            min-height: calc(100vh - 70px);
+        }
+
+        .view-transition {
+            animation: slideFade 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        @keyframes slideFade {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Dashboard Statistics */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-box {
+            background: var(--card-glass);
+            border: 1px solid var(--border-glass);
+            border-radius: 20px;
+            padding: 1.8rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: 0.3s;
+        }
+
+        .stat-box:hover {
+            transform: scale(1.02);
+            border-color: var(--primary-light);
+        }
+
+        .stat-num {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary-light);
+            margin-bottom: 0.3rem;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text-dim);
+        }
+
+        /* Feedback Form Layout */
+        .form-section {
+            display: grid;
+            grid-template-columns: 1fr;
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 650px) {
+            .form-grid { grid-template-columns: 1fr; }
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.6rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-dim);
+        }
+
+        input, select, textarea {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-glass);
+            border-radius: 14px;
+            padding: 0.9rem 1.1rem;
+            color: var(--text-main);
+            font-size: 0.95rem;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+        }
+
+        option { background: #0f172a; color: white; }
+
+        .error-hint {
+            color: var(--error);
+            font-size: 0.75rem;
+            margin-top: 0.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        button.cta {
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            border: none;
+            border-radius: 14px;
+            padding: 1.1rem;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.4s;
+            margin-top: 1rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        button.cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+            filter: brightness(1.1);
+        }
+
+        /* Rating Range Customization */
+        input[type="range"] {
+            -webkit-appearance: none;
+            height: 6px;
+            background: var(--border-glass);
+            border-radius: 10px;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: var(--primary-light);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+        }
+
+        /* Feedbacks Dashboard Table */
+        .archive-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .feedback-card-item {
+            background: var(--card-glass);
+            border: 1px solid var(--border-glass);
+            border-radius: 20px;
+            padding: 1.8rem;
+            position: relative;
+            transition: 0.4s;
+        }
+
+        .feedback-card-item:hover {
+            border-color: var(--primary-light);
+            background: rgba(255, 255, 255, 0.06);
+            transform: translateY(-5px);
+        }
+
+        .rating-badge {
+            position: absolute;
+            top: 1.8rem;
+            right: 1.8rem;
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--success);
+            padding: 4px 12px;
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .student-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+            padding-right: 3rem;
+        }
+
+        .meta-text {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            margin-bottom: 1rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+
+        .meta-tag {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .feedback-body {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #d1d5db;
+            background: rgba(255,255,255,0.02);
+            padding: 1rem;
+            border-radius: 12px;
+            font-style: italic;
+        }
+
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 5rem 0;
+            color: var(--text-dim);
+        }
+    </style>
+</head>
+<body>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    
+    <div id="root"></div>
+
+    <script type="text/babel">
+        /**
+         * Student Feedback System
+         * Assignment 8: React Dynamic List & Multi-View
+         * Tech: React Hooks (useState, useRef, useEffect, useMemo)
+         */
+        const { useState, useRef, useEffect, useMemo } = React;
+
+        function App() {
+            // Task 2: State for View Controller (Multi-page feel)
+            const [activePage, setActivePage] = useState('home');
+
+            // Task 2: State for Feedback Collection
+            const [feedbacks, setFeedbacks] = useState([
+                {
+                    id: 4567,
+                    name: 'Alex Johnson',
+                    course: 'Design and Analysis of Algorithms',
+                    professor: 'Dr. Emily Carter',
+                    semester: 'Winter 2024',
+                    rating: 5,
+                    comment: 'The focus on Dynamic Programming was extremely helpful for my coding interviews.'
+                },
+                {
+                    id: 8910,
+                    name: 'Siddharth Rao',
+                    course: 'Compiler Design',
+                    professor: 'Prof. Mark Wilson',
+                    semester: 'Autumn 2023',
+                    rating: 4,
+                    comment: 'Challenging course but the hands-on parser assignments were top-notch.'
+                }
+            ]);
+
+            // Task 2: Controlled Form Component State
+            const [formData, setFormData] = useState({
+                name: '',
+                course: 'Design and Analysis of Algorithms',
+                professor: '',
+                semester: 'Winter 2024',
+                rating: 5,
+                comment: ''
+            });
+
+            const [errors, setErrors] = useState({});
+
+            // Task 3: useRef for DOM manipulation (Auto-focusing field)
+            const nameInputRef = useRef(null);
+
+            // Auto-focus logic: Using Task 3 for optimal UX
+            useEffect(() => {
+                if (activePage === 'home' && nameInputRef.current) {
+                    nameInputRef.current.focus();
+                }
+            }, [activePage]);
+
+            // Advanced Statistics (useMemo for performance)
+            const stats = useMemo(() => {
+                const total = feedbacks.length;
+                const sum = feedbacks.reduce((acc, f) => acc + parseInt(f.rating), 0);
+                const avg = total > 0 ? (sum / total).toFixed(1) : 0;
+                
+                // Group by course
+                const courseDistribution = feedbacks.reduce((acc, f) => {
+                    acc[f.course] = (acc[f.course] || 0) + 1;
+                    return acc;
+                }, {});
+
+                return { total, avg, distribution: courseDistribution };
+            }, [feedbacks]);
+
+            const handleInputChange = (e) => {
+                const { name, value } = e.target;
+                setFormData(prev => ({ ...prev, [name]: value }));
+                // Clear error if user starts typing
+                if (errors[name]) setErrors(prev => ({ ...prev, [name]: '' }));
+            };
+
+            const validateForm = () => {
+                const newErrors = {};
+                if (!formData.name.trim()) newErrors.name = "Student identity is required";
+                if (!formData.professor.trim()) newErrors.professor = "Assign a professor";
+                if (!formData.comment.trim() || formData.comment.length < 10) 
+                    newErrors.comment = "Please provide detailed feedback (min. 10 chars)";
+                
+                setErrors(newErrors);
+                return Object.keys(newErrors).length === 0;
+            };
+
+            const handleFormSubmit = (e) => {
+                e.preventDefault();
+                if (validateForm()) {
+                    // Task 4: Dynamic Creation with Unique Key
+                    const submission = {
+                        ...formData,
+                        id: Date.now() // Unique identifier
+                    };
+
+                    setFeedbacks([submission, ...feedbacks]);
+
+                    // Reset Flow
+                    setFormData({
+                        name: '',
+                        course: 'Design and Analysis of Algorithms',
+                        professor: '',
+                        semester: 'Winter 2024',
+                        rating: 5,
+                        comment: ''
+                    });
+
+                    // Task 3: Focus back to name after submission success
+                    nameInputRef.current.focus();
+                    alert("Submission Received! Check the Archives.");
+                    setActivePage('archive'); // Navigate to results
+                }
+            };
+
+            return (
+                <div className="portal-app">
+                    <nav>
+                        <div className="nav-brand" onClick={() => setActivePage('home')}>STUDENT.FEEDBACK</div>
+                        <div className="nav-menu">
+                            <div 
+                                className={`nav-item ${activePage === 'home' ? 'active' : ''}`} 
+                                onClick={() => setActivePage('home')}
+                            >
+                                <i className="fas fa-plus-circle"></i> NEW ENTRY
+                            </div>
+                            <div 
+                                className={`nav-item ${activePage === 'archive' ? 'active' : ''}`} 
+                                onClick={() => setActivePage('archive')}
+                            >
+                                <i className="fas fa-database"></i> ARCHIVES
+                            </div>
+                            <div 
+                                className={`nav-item ${activePage === 'stats' ? 'active' : ''}`} 
+                                onClick={() => setActivePage('stats')}
+                            >
+                                <i className="fas fa-chart-line"></i> INSIGHTS
+                            </div>
+                        </div>
+                    </nav>
+
+                    <main className="page-container">
+                        
+                        {/* VIEW 1: FORM PORTAL (Home) */}
+                        {activePage === 'home' && (
+                            <div className="view-transition">
+                                <header style={{textAlign: 'center', marginBottom: '3rem'}}>
+                                    <h1 style={{fontSize: '2.5rem', marginBottom: '0.5rem'}}>Academic Quality Portal</h1>
+                                    <p style={{color: 'var(--text-dim)'}}>Submit your module evaluations for the current academic session.</p>
+                                </header>
+
+                                <section className="form-section glass-panel">
+                                    <form onSubmit={handleFormSubmit}>
+                                        <div className="form-grid">
+                                            <div className="form-group">
+                                                <label>Full Name</label>
+                                                <input 
+                                                    ref={nameInputRef} /* Task 3: useRef Binding */
+                                                    type="text" name="name"
+                                                    placeholder="e.g. Satya Nadella"
+                                                    value={formData.name}
+                                                    onChange={handleInputChange}
+                                                />
+                                                {errors.name && <span className="error-hint"><i className="fas fa-info-circle"></i> {errors.name}</span>}
+                                            </div>
+
+                                            <div className="form-group">
+                                                <label>Subject Course</label>
+                                                <select name="course" value={formData.course} onChange={handleInputChange}>
+                                                    <option>Design and Analysis of Algorithms</option>
+                                                    <option>Compiler Design</option>
+                                                    <option>Web Technology</option>
+                                                    <option>Mobile Computing</option>
+                                                </select>
+                                            </div>
+
+                                            <div className="form-group">
+                                                <label>Course Instructor</label>
+                                                <input 
+                                                    type="text" name="professor"
+                                                    placeholder="Professor Name"
+                                                    value={formData.professor}
+                                                    onChange={handleInputChange}
+                                                />
+                                                {errors.professor && <span className="error-hint"><i className="fas fa-info-circle"></i> {errors.professor}</span>}
+                                            </div>
+
+                                            <div className="form-group">
+                                                <label>Academic Semester</label>
+                                                <select name="semester" value={formData.semester} onChange={handleInputChange}>
+                                                    <option>Winter 2024</option>
+                                                    <option>Spring 2024</option>
+                                                    <option>Monsoon 2024</option>
+                                                </select>
+                                            </div>
+
+                                            <div className="form-group" style={{gridColumn: 'span 2'}}>
+                                                <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '1rem'}}>
+                                                    <label>Performance Rating</label>
+                                                    <span style={{color: 'var(--primary-light)', fontWeight: 700}}>{formData.rating} Stars / 5</span>
+                                                </div>
+                                                <input 
+                                                    type="range" min="1" max="5" name="rating"
+                                                    value={formData.rating} onChange={handleInputChange}
+                                                />
+                                            </div>
+
+                                            <div className="form-group" style={{gridColumn: 'span 2'}}>
+                                                <label>Constructive Feedback</label>
+                                                <textarea 
+                                                    name="comment" rows="4"
+                                                    placeholder="How was the session delivery? What can we improve?"
+                                                    value={formData.comment}
+                                                    onChange={handleInputChange}
+                                                ></textarea>
+                                                {errors.comment && <span className="error-hint"><i className="fas fa-info-circle"></i> {errors.comment}</span>}
+                                            </div>
+                                        </div>
+
+                                        <button type="submit" className="cta">
+                                            <i className="fas fa-rocket"></i> SUBMIT EVALUATION
+                                        </button>
+                                    </form>
+                                </section>
+                            </div>
+                        )}
+
+                        {/* VIEW 2: ARCHIVES (Feedbacks Board) */}
+                        {activePage === 'archive' && (
+                            <div className="view-transition">
+                                <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '2.5rem', borderBottom: '1px solid var(--border-glass)', paddingBottom: '1rem'}}>
+                                    <div>
+                                        <h1>Submission Archive</h1>
+                                        <p style={{color: 'var(--text-dim)'}}>Live data of peer evaluations and course ratings.</p>
+                                    </div>
+                                    <h3 style={{color: 'var(--primary-light)'}}>{feedbacks.length} ENTRIES FOUND</h3>
+                                </div>
+
+                                <div className="archive-grid">
+                                    {feedbacks.length === 0 ? (
+                                        <div className="empty-state">
+                                            <i className="fas fa-folder-open" style={{fontSize: '3rem', marginBottom: '1rem'}}></i>
+                                            <p>No feedback available at the moment.</p>
+                                        </div>
+                                    ) : (
+                                        /* Task 4 & 5: Render list items using unique Keys */
+                                        feedbacks.map(item => (
+                                            <div className="feedback-card-item" key={item.id}>
+                                                <span className="rating-badge">{item.rating} <i className="fas fa-star" style={{fontSize: '0.65rem'}}></i></span>
+                                                <h3 className="student-title">{item.name}</h3>
+                                                <div className="meta-text">
+                                                    <span className="meta-tag"><i className="fas fa-book-open"></i> {item.course}</span>
+                                                    <span className="meta-tag"><i className="fas fa-user-tie"></i> {item.professor}</span>
+                                                    <span className="meta-tag"><i className="fas fa-calendar-alt"></i> {item.semester}</span>
+                                                </div>
+                                                <div className="feedback-body">
+                                                    "{item.comment}"
+                                                </div>
+                                            </div>
+                                        ))
+                                    )}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* VIEW 3: INSIGHTS (Statistics Dashboard) */}
+                        {activePage === 'stats' && (
+                            <div className="view-transition">
+                                <h1 style={{marginBottom: '2.5rem', textAlign: 'center'}}>Academic Insights Dashboard</h1>
+                                
+                                <div className="stats-grid">
+                                    <div className="stat-box">
+                                        <span className="stat-num">{stats.total}</span>
+                                        <span className="stat-label">Total Submissions</span>
+                                    </div>
+                                    <div className="stat-box">
+                                        <span className="stat-num">{stats.avg}</span>
+                                        <span className="stat-label">Aggregated Rating</span>
+                                    </div>
+                                    <div className="stat-box">
+                                        <span className="stat-num">{Object.keys(stats.distribution).length}</span>
+                                        <span className="stat-label">Courses Covered</span>
+                                    </div>
+                                </div>
+
+                                <div className="glass-panel" style={{padding: '2.5rem'}}>
+                                    <h3 style={{marginBottom: '1.5rem'}}><i className="fas fa-chart-pie"></i> Evaluation Coverage</h3>
+                                    <div style={{display: 'flex', flexDirection: 'column', gap: '1rem'}}>
+                                        {Object.entries(stats.distribution).map(([course, count]) => {
+                                            const percentage = (count / stats.total * 100).toFixed(0);
+                                            return (
+                                                <div key={course} style={{marginBottom: '0.5rem'}}>
+                                                    <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', fontSize: '0.9rem'}}>
+                                                        <span>{course}</span>
+                                                        <span style={{color: 'var(--primary-light)'}}>{count} Submissions</span>
+                                                    </div>
+                                                    <div style={{height: '10px', background: 'var(--border-glass)', borderRadius: '10px', overflow: 'hidden'}}>
+                                                        <div style={{width: `${percentage}%`, height: '100%', background: 'var(--primary)', boxShadow: '0 0 10px var(--primary)'}}></div>
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                    </main>
+                </div>
+            );
+        }
+
+        const rootLayout = ReactDOM.createRoot(document.getElementById('root'));
+        rootLayout.render(<App />);
+    </script>
+</body>
+</html>
